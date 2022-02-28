@@ -1,11 +1,23 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset="utf-8">
-    <title>Image Board</title>
-</head>
-<body>
-    
-    <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
-</body>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style.css">
+        <title>Image Board</title>
+    </head>
+    <body>
+        <div id="main">
+            <header>
+                <h1>Image Board!</h1>
+                <h2>Latest Images</h2>
+            </header>
+            <div class="images-container" >
+                <div class="each-img" v-bind:key="image.id" v-for="image in images">
+                    <img v-bind:src="image.url"/>
+                    <p>{{image.title}}</p>
+                </div>
+            </div>
+        </div>
+        <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
+    </body>
 </html>
