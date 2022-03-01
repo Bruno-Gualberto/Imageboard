@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <link rel="stylesheet" href="/style.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
         <title>Image Board</title>
     </head>
     <body>
@@ -11,6 +12,14 @@
                 <h1>Image Board!</h1>
                 <h2>Latest Images</h2>
             </header>
+            <form>
+                <input v-model="title" type="text" name="title" placeholder="Title">
+                <input v-model="description" type="text" name="description" placeholder="Description">
+                <input v-model="username" type="text" name="username" placeholder="Username">
+                <input @change="selectFile" type="file" name="file" id="file" accept="image/*">
+                <label for="file">{{file.name || 'Choose a file'}}</label>
+                <button @click.prevent.default="upload">UPLOAD</button>
+            </form>
             <div class="images-container" >
                 <div class="each-img" v-bind:key="image.id" v-for="image in images">
                     <img v-bind:src="image.url"/>
