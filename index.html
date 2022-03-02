@@ -7,7 +7,8 @@
         <title>Image Board</title>
     </head>
     <body>
-        <div id="main">
+        <div v-cloak id="main">
+            <modal-component @close="closeHandler" v-if="imageId" v-bind:image-id="imageId"></modal-component>
             <header>
                 <h1>Image Board!</h1>
                 <h2>Latest Images</h2>
@@ -21,12 +22,13 @@
                 <button @click.prevent.default="upload">UPLOAD</button>
             </form>
             <div class="images-container" >
-                <div class="each-img" v-bind:key="image.id" v-for="image in images">
-                    <img v-bind:src="image.url"/>
+                <div class="each-img" v-bind:key="image.id" v-for="image in images" >
+                    <img v-bind:src="image.url" @click="showModal" v-bind:key="image.id"/>
                     <p>{{image.title}}</p>
                 </div>
             </div>
         </div>
+
         <script src="/js/app.js" type="module" crossorigin="use-credentials"></script>
     </body>
 </html>

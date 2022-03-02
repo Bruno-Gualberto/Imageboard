@@ -1,4 +1,5 @@
 import * as Vue from './vue.js';
+import modalComponent from "./modalComponent.js";
 
 const app = Vue.createApp({
     data () {
@@ -7,11 +8,12 @@ const app = Vue.createApp({
             description: "",
             username: "",
             file: "",
-            images: []
+            images: [],
+            imageId: 0,
         }
     },
     updated() {
-        console.log("this.file on update", this.file)
+
     },
     mounted() {
         console.log("on mounted lifecyle!");
@@ -25,7 +27,7 @@ const app = Vue.createApp({
         selectFile: function(e) {
             this.file = e.target.files[0];
         },
-        upload: function(e) {
+        upload: function() {
             // I'm already preventing default behavior on html with vue syntax
 
             // The FormData é um metodo JS que me permite mandar um arquivo por um POST request em formato JSON
@@ -42,11 +44,19 @@ const app = Vue.createApp({
                 body: fd
                 // depois devo unshift a imagem no array do state com a resposta do server:
             }).then(resp => resp.json()).then(data => {
-                console.log("response in fetch /upload: ", data);
                 this.images.unshift(data);
             }).catch(err => console.log("err in /upload", err));
+        },
+        showModal: function(e) {
+            this.imageId = e.target.__vnode.key;
+        },
+        closeHandler: function() {
+            this.imageId = 0;
         }
     },
+    components: {
+        "modal-component": modalComponent
+    }
 });
 
 app.mount("#main");

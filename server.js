@@ -48,12 +48,22 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     // the url must be:
     // `https://s3.amazonaws.com/Name-BUCKET/${req.file.filename}`
     db.addImage(title, username, description, url).then(({rows}) => {
-        res.json(rows[0]);
+        return res.json(rows[0]);
     }).catch(err => {
         console.log(err);
-        res.sendStatus(500);
+        return res.sendStatus(500);
     })
     
+});
+
+app.get("/single-image/:imageId", (req, res) => {
+    db.getSingleImageInfo(req.params.imageId).then(({ rows }) => {
+        return res.json(rows[0]);
+    }).catch(err => {
+        console.log("error on getting single image info: ", err)
+        return res.sendStatus(500);
+    })
+
 });
 
 // this route should come at last

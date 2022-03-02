@@ -16,3 +16,11 @@ module.exports.addImage = (title, username, description, url) => {
         RETURNING *
     `, [title, username, description, url]);
 }
+
+module.exports.getSingleImageInfo = imageId => {
+    return db.query(`
+        SELECT * 
+        FROM images
+        WHERE id = $1
+    `, [imageId]);
+}
