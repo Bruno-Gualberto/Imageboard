@@ -29,15 +29,14 @@ const uploader = multer({
     }
 });
 
-// function hasAllFields(req, res, next) {
-//     let { title, username, description } = req.body;
-//     if (title === "" || username === "" || description === "") {
-//         console.log("title", title)
-//         return res.setHeader("hasError", "true");
-//     } else {
-//         next();
-//     }
-// }
+function hasAllFields(req, res, next) {
+    let { title, username, description } = req.body;
+    if (title === "" || username === "" || description === "") {
+        return res.json({hasError: true});
+    } else {
+        next();
+    }
+}
 
 app.use(express.static('./public'));
 
@@ -50,8 +49,7 @@ app.get("/images.json", (req, res) => {
     }).catch(err => console.log("error getting images", err))
 });
 
-app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    console.log("/upload POST request was made");
+app.post("/upload", uploader.single("file"), hasAllFields, s3.upload, (req, res) => {
     let { title, username, description } = req.body;
     // title, username and description are in req.body
     let url = `https://s3.amazonaws.com/bucketforimageboard/${req.file.filename}`;
@@ -73,6 +71,36 @@ app.get("/single-image/:imageId", (req, res) => {
         return res.sendStatus(500);
     })
 
+});
+
+app.get("/comments/:imageId", (req, res) => {
+    db.getImageComments(req.params.imageId).then(({ rows }) => {
+        return res.json(rows);
+    })
+    .catch(err => {
+        console.log("error on getting comments: ", err);
+        return res.sendStatus(500);
+    });
+});
+
+app.post("/submit-comments", (req, res) => {
+    const { imageId, username, comment } = req.body;
+    db.addComment(imageId, username, comment).then(({ rows }) => {
+        return res.json(rows[0]);
+    }).catch(err => {
+        console.log("error on adding comment to db: ", err);
+        return res.sendStatus(500);
+    });
+});
+
+app.get("/more-images/:smallestId", (req, res) => {
+    const idNumber = parseInt(req.params.smallestId);
+    db.getMoreImages(idNumber).then(({rows}) => {
+        return res.json(rows)
+    }).catch(err => {
+        console.log("error on getting more images: ", err);
+        return res.sendStatus(500);
+    })
 });
 
 // this route should come at last

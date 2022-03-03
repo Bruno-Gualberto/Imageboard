@@ -11,18 +11,16 @@ const app = Vue.createApp({
             file: "",
             images: [],
             imageId: 0,
-            hasError: false
+            hasError: false,
+            moreButton: true,
         }
     },
-    updated() {
-
-    },
     mounted() {
-        console.log("on mounted lifecyle!");
         fetch("/images.json").then(result => {
             return result.json();
         }).then(data => {
-            this.images = data;
+                this.images = data;
+                this.images.filter(item => item.id === item.lowestId).length ? this.moreButton = false : this.moreButton = true;
         }).catch(err => console.log("error on getting data", err))
     },
     methods: {
@@ -31,7 +29,6 @@ const app = Vue.createApp({
         },
         upload: function() {
             // I'm already preventing default behavior on html with vue syntax
-
             // The FormData é um metodo JS que me permite mandar um arquivo por um POST request em formato JSON
             // E preciso usar isso pra mandar pelo POST porque estou querendo mandar um arquivo tambem
             const fd = new FormData();
@@ -46,7 +43,15 @@ const app = Vue.createApp({
                 body: fd
                 // depois devo unshift a imagem no array do state com a resposta do server:
             }).then(resp => resp.json()).then(data => {
-                this.images.unshift(data);
+                if (data.hasError) {
+                    this.hasError = true;
+                } else {
+                    this.images.unshift(data);
+                    this.title = "";
+                    this.description = "";
+                    this.username = "";
+                    this.file = "";
+                }
             }).catch(err => console.log("err in /upload", err));
         },
         showModal: function(e) {
@@ -55,6 +60,13 @@ const app = Vue.createApp({
         },
         closeHandler: function() {
             this.imageId = 0;
+        },
+        moreHandler: function() {
+            const smallestId = this.images[this.images.length - 1].id;
+            fetch(`/more-images/${smallestId}`).then(resp => resp.json()).then(data => {
+                this.images = [...this.images, ...data];
+                this.images.filter(item => item.id === item.lowestId).length ? (this.moreButton = false) : (this.moreButton = true);
+            }).catch(err => console.log("error on fetch on more button", err))
         }
     },
     components: {
