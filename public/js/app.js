@@ -1,5 +1,6 @@
 import * as Vue from './vue.js';
 import modalComponent from "./modalComponent.js";
+import errorMessage from "./errorMessage.js";
 
 const app = Vue.createApp({
     data () {
@@ -10,6 +11,7 @@ const app = Vue.createApp({
             file: "",
             images: [],
             imageId: 0,
+            hasError: false
         }
     },
     updated() {
@@ -48,6 +50,7 @@ const app = Vue.createApp({
             }).catch(err => console.log("err in /upload", err));
         },
         showModal: function(e) {
+            document.body.style.overflow = "hidden";
             this.imageId = e.target.__vnode.key;
         },
         closeHandler: function() {
@@ -55,7 +58,8 @@ const app = Vue.createApp({
         }
     },
     components: {
-        "modal-component": modalComponent
+        "modal-component": modalComponent,
+        "error-message": errorMessage
     }
 });
 

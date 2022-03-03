@@ -13,11 +13,19 @@ body {
     display: none;
 }
 
+header {
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 5px;
+}
+
 form {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-top: 20px;
 }
 
 form input, form label, form button {
@@ -114,24 +122,56 @@ button:focus {
     font-size: 20px;
 }
 
+/* MODAL COMPONENT */
 .modal-container {
-    position: absolute;
-    background-color: grey;
-    left: 25vw;
-    width: 50vw;
-    height: 75vh;
+    position: fixed;
     color: white;
+    width: 100%;
+    height: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-container .modal {
+    background-color: grey;
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 50vw;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 20px;
 }
 
 .modal-container .close-icon {
     cursor: pointer;
+    align-self: flex-end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    height: 40px;
+    width: 40px;
+    border: 3px solid white;
+    border-radius: 100%;
+    margin-bottom: 10px;
 }
 
 .modal-container .modal-img {
     object-fit: cover;
-    width: 400px;
-    height: 400px;
+    width: 450px;
+    height: 450px;
+}
+
+.modal-container .modal-username {
+    color: rgb(0, 0, 146);
+}
+
+.modal-container .modal-timestamp {
+    font-size: 16px;
+    color: rgb(209, 209, 209);
 }

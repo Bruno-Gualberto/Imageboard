@@ -29,6 +29,16 @@ const uploader = multer({
     }
 });
 
+// function hasAllFields(req, res, next) {
+//     let { title, username, description } = req.body;
+//     if (title === "" || username === "" || description === "") {
+//         console.log("title", title)
+//         return res.setHeader("hasError", "true");
+//     } else {
+//         next();
+//     }
+// }
+
 app.use(express.static('./public'));
 
 // middleware to properly access incoming requests of content-type application/json
@@ -53,7 +63,6 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         console.log(err);
         return res.sendStatus(500);
     })
-    
 });
 
 app.get("/single-image/:imageId", (req, res) => {
