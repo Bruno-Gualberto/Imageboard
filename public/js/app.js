@@ -1,6 +1,6 @@
 import * as Vue from './vue.js';
-import modalComponent from "./modalComponent.js";
-import errorMessage from "./errorMessage.js";
+import modalComponent from "./components/modalComponent.js";
+import errorMessage from "./components/errorMessage.js";
 
 const app = Vue.createApp({
     data () {
@@ -10,7 +10,7 @@ const app = Vue.createApp({
             username: "",
             file: "",
             images: [],
-            imageId: 0,
+            imageId: location.pathname.slice(1),
             hasError: false,
             moreButton: true,
         }
@@ -22,6 +22,10 @@ const app = Vue.createApp({
                 this.images = data;
                 this.images.filter(item => item.id === item.lowestId).length ? this.moreButton = false : this.moreButton = true;
         }).catch(err => console.log("error on getting data", err))
+
+        addEventListener("popstate", () => {
+            this.imageId = location.pathname.slice(1);
+        });
     },
     methods: {
         selectFile: function(e) {
@@ -57,9 +61,11 @@ const app = Vue.createApp({
         showModal: function(e) {
             document.body.style.overflow = "hidden";
             this.imageId = e.target.__vnode.key;
+            history.pushState({}, "", `/${this.imageId}`);
         },
         closeHandler: function() {
-            this.imageId = 0;
+            history.pushState({}, "", "/");
+            this.imageId = location.pathname.slice(1);
         },
         moreHandler: function() {
             const smallestId = this.images[this.images.length - 1].id;

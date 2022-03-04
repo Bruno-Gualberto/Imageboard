@@ -18,7 +18,8 @@ header {
 }
 
 .error-message {
-    color: red;
+    color: rgb(226, 0, 0);
+    font-size: 16px;
     margin-bottom: 5px;
 }
 
@@ -95,7 +96,7 @@ button:hover {
     justify-content: space-between;
     column-gap: 20px;
     row-gap: 20px;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
 .each-img {
@@ -140,9 +141,29 @@ button:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 80%;
     padding: 20px;
     border-radius: 5px;
     font-size: 20px;
+}
+
+.modal-container .prev-next-buttons {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    font-size: 60px;
+    height: 80%;
+    /* border-radius: 100%;
+    border: 5px solid white; */
+    /* margin: 10px; */
+    transition: all .25s;
+}
+
+.modal-container .prev-next-buttons:hover {
+    background-color: rgba(0, 0, 0, .5);
 }
 
 .modal-container .close-icon {
@@ -154,12 +175,17 @@ button:hover {
     height: 40px;
     width: 40px;
     border: 3px solid white;
-    border-radius: 100%;
+    border-radius: 40px;
     margin-bottom: 10px;
 }
 
 .modal-container .modal-img-text-container {
     display: flex;
+}
+
+.modal-container .modal-text-container {
+    display: flex;
+    flex-direction: column;
 }
 
 .modal-container .modal-img {
@@ -179,3 +205,28 @@ button:hover {
 }
 
 /* COMMENTS COMPONENT */
+.modal-container .comments-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.comments-container .comments-section {
+    margin-top: 10px;
+    background-color: rgb(196, 196, 196);
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    max-height: 300px;
+    overflow: scroll;
+}
+
+.modal-container .not-found {
+    font-size: 50px;
+}
+
+.comments-container .each-comment small {
+    color: rgb(109, 109, 109);
+    font-size: 16px;
+}

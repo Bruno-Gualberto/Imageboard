@@ -31,7 +31,16 @@ const uploader = multer({
 
 function hasAllFields(req, res, next) {
     let { title, username, description } = req.body;
-    if (title === "" || username === "" || description === "") {
+    if (!title || !username || !description) {
+        return res.json({hasError: true});
+    } else {
+        next();
+    }
+}
+
+function hasTitleUsername(req, res, next) {
+    let { comment, username } = req.body;
+    if (!comment || !username) {
         return res.json({hasError: true});
     } else {
         next();
@@ -83,7 +92,7 @@ app.get("/comments/:imageId", (req, res) => {
     });
 });
 
-app.post("/submit-comments", (req, res) => {
+app.post("/submit-comments", hasTitleUsername, (req, res) => {
     const { imageId, username, comment } = req.body;
     db.addComment(imageId, username, comment).then(({ rows }) => {
         return res.json(rows[0]);
