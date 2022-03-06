@@ -23,7 +23,14 @@ module.exports.addImage = (title, username, description, url) => {
 
 module.exports.getSingleImageInfo = imageId => {
     return db.query(`
-        SELECT *
+        SELECT *,
+            (SELECT id FROM images 
+                WHERE id < $1
+                ORDER BY id DESC
+                LIMIT 1) AS "nextId",
+            (SELECT id FROM images
+                WHERE id > $1
+                LIMIT 1) AS "prevId"
         FROM images
         WHERE id = $1
     `, [imageId]);
@@ -56,4 +63,16 @@ module.exports.getMoreImages = idNumber => {
         ORDER BY id DESC
         LIMIT 3;
     `, [idNumber]);
+}
+
+module.exports.deleteImgComments = imageId => {
+    return db.query(`
+        DELETE FROM comments WHERE image_id = $1
+    `, [imageId])
+}
+
+module.exports.deleteImg = imageId => {
+    return db.query(`
+        DELETE FROM images WHERE id = $1
+    `, [imageId])
 }

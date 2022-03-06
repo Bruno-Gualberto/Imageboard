@@ -156,9 +156,6 @@ button:hover {
     height: 60px;
     font-size: 60px;
     height: 80%;
-    /* border-radius: 100%;
-    border: 5px solid white; */
-    /* margin: 10px; */
     transition: all .25s;
 }
 
@@ -168,30 +165,26 @@ button:hover {
 
 .modal-container .close-icon {
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 30px;
-    height: 40px;
-    width: 40px;
-    border: 3px solid white;
-    border-radius: 40px;
+    height: 30px;
     margin-bottom: 10px;
 }
 
 .modal-container .modal-img-text-container {
     display: flex;
+    height: 100%;
 }
 
 .modal-container .modal-text-container {
     display: flex;
     flex-direction: column;
+    width: 50%;
 }
 
 .modal-container .modal-img {
     object-fit: cover;
-    width: 450px;
-    height: 450px;
+    width: 50%;
+    height: 100%;
     margin-right: 20px;
 }
 
@@ -216,9 +209,8 @@ button:hover {
     margin-top: 10px;
     background-color: rgb(196, 196, 196);
     color: black;
-    padding: 5px 10px;
     border-radius: 5px;
-    max-height: 300px;
+    max-height: 400px;
     overflow: scroll;
 }
 
@@ -229,4 +221,29 @@ button:hover {
 .comments-container .each-comment small {
     color: rgb(109, 109, 109);
     font-size: 16px;
+}
+
+.comments-container input {
+    width: 40%;
+    margin: 0 10px 10px 0;
+}
+
+.comments-container .buttons-container {
+    width: 100%;
+}
+
+.comments-container button {
+    width: 40%;
+    margin-right: 10px;
+}
+
+.comments-container .delete-button {
+    border: 2px solid rgb(226, 0, 0);
+    color: white;
+    background-color: rgb(226, 0, 0);
+}
+
+.comments-container .delete-button:hover {
+    background-color: rgb(163, 0, 0);
+    border: 2px solid rgb(163, 0, 0);
 }

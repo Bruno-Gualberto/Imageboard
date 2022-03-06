@@ -45,7 +45,6 @@ const app = Vue.createApp({
             fetch("/upload", {
                 method: "POST",
                 body: fd
-                // depois devo unshift a imagem no array do state com a resposta do server:
             }).then(resp => resp.json()).then(data => {
                 if (data.hasError) {
                     this.hasError = true;
@@ -73,6 +72,14 @@ const app = Vue.createApp({
                 this.images = [...this.images, ...data];
                 this.images.filter(item => item.id === item.lowestId).length ? (this.moreButton = false) : (this.moreButton = true);
             }).catch(err => console.log("error on fetch on more button", err))
+        },
+        updateUrl: function(e) {
+            this.imageId = e;
+            history.pushState({}, "", `/${e}`)
+        },
+        deleteImage: function() {
+            this.images = this.images.filter(image => image.id !== this.imageId);
+            this.closeHandler();
         }
     },
     components: {

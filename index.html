@@ -8,7 +8,7 @@
     </head>
     <body>
         <div v-cloak id="main">
-            <modal-component @close="closeHandler" v-if="imageId" v-bind:image-id="imageId"></modal-component>
+            <modal-component @delete-image="deleteImage" @prev-next="updateUrl" @close="closeHandler" v-if="imageId" v-bind:image-id="imageId"></modal-component>
             <header>
                 <h1>Image Board!</h1>
                 <h2>Latest Images</h2>

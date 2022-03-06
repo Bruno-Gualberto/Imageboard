@@ -112,6 +112,14 @@ app.get("/more-images/:smallestId", (req, res) => {
     })
 });
 
+app.get("/deleteImg/:id", (req, res) => {
+    db.deleteImgComments(req.params.id).then(() => {
+        db.deleteImg(req.params.id).then(() => {
+            console.log("image and comments deleted!")
+        }).catch(err => console.log("error deleting image", err));
+    }).then(() => res.json({response: "ok"})).catch(err => console.log("error deleting image comments", err));
+});
+
 // this route should come at last
 app.get('*', (req, res) => {
     res.sendFile(`${__dirname}/index.html`);

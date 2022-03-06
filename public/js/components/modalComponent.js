@@ -5,39 +5,75 @@ const modalComponent = {
     data() {
         return {
             imageInfo: {},
-            hasImage: true
+            hasImage: true,
+            hasPrev: true,
+            hasNext: true,
         };
     },
     props: ["imageId"],
     mounted() {
-        fetch(`/single-image/${this.imageId}`).then(resp => {
-            return resp.json();
-        }).then(data => {
-            dateHelper(data);
-            this.imageInfo = data;
-            this.hasImage = true;
-        })
-        .catch(err => {
-            !this.imageInfo.id ? this.hasImage = false : this.hasImage = true; 
-            document.querySelector(".modal").style.height = "auto";
-            console.log("error getting data form server: ", err);
-        });
+        this.fetchImg();
     },
     methods: {
         closeModal: function (e) {
             e.stopPropagation();
-            if (e.target.className === "modal-container" || e.target.className === "close-icon") {
+            if (
+                e.target.className === "modal-container" ||
+                e.target.className === "close-icon"
+            ) {
                 document.body.style.overflow = "auto";
                 this.$emit("close");
             }
         },
+        prevClick: function () {
+            this.$emit("prevNext", this.imageInfo.prevId);
+        },
+        nextClick: function () {
+            this.$emit("prevNext", this.imageInfo.nextId);
+        },
+        fetchImg: function () {
+            fetch(`/single-image/${this.imageId}`)
+                .then((resp) => {
+                    return resp.json();
+                })
+                .then((data) => {
+                    dateHelper(data);
+                    this.imageInfo = data;
+                    this.hasImage = true;
+
+                    !this.imageInfo.nextId
+                        ? (this.hasNext = false)
+                        : (this.hasNext = true);
+                    !this.imageInfo.prevId
+                        ? (this.hasPrev = false)
+                        : (this.hasPrev = true);
+                })
+                .catch((err) => {
+                    !this.imageInfo.id
+                        ? (this.hasImage = false)
+                        : (this.hasImage = true);
+                    this.hasPrev = false;
+                    this.hasNext = false;
+                    document.querySelector(".modal").style.height = "auto";
+                    console.log("error getting data form server: ", err);
+                });
+        },
+        deleteImg: function() {
+            this.imageInfo = {};
+            this.$emit("deleteImage")
+        },
+    },
+    watch: {
+        imageId: function () {
+            this.fetchImg();
+        },
     },
     components: {
-        "comments-component": commentsComponent
+        "comments-component": commentsComponent,
     },
     template: `
         <div @click="closeModal" class="modal-container">
-        <div class="prev-next-buttons"><p><</p></div>
+        <div v-if="hasPrev" class="prev-next-buttons" @click="prevClick"><p><</p></div>
             <div class="modal">
 
                 <p class="not-found" v-if="!this.hasImage">👮‍♀️ 🕵️‍♀️ Sorry! Image not found! 🕵️ 👮‍♀️</p>
@@ -52,14 +88,14 @@ const modalComponent = {
                             <p class="modal-timestamp">From {{this.imageInfo.created_at}}</p>
                         </div>
                         
-                        <comments-component :image-id="this.imageId"></comments-component>
+                        <comments-component @delete="deleteImg" :image-id="this.imageId"></comments-component>
                     </div>  
 
                     <div @click="closeModal" class="close-icon">X</div>
                 </div> 
             </div>
 
-            <div class="prev-next-buttons"><p>></p></div>
+            <div v-if="hasNext" class="prev-next-buttons" @click="nextClick"><p>></p></div>
         </div>
     `,
 };
